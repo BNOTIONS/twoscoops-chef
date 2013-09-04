@@ -15,14 +15,14 @@ include_recipe "twoscoops::database"
 include_recipe "twoscoops::webserver"
 
 user "deploy" do
-  home node['twoscoops']['application_deploy_path']
+  home node['twoscoops']['application_path']
   shell "/bin/bash"
   supports :manage_home => true
 end
 
 application node['twoscoops']['application_name'] do
   packages ["git-core"]
-  path "#{node['twoscoops']['application_deploy_path']}/#{node['twoscoops']['application_name']}"
+  path "#{node['twoscoops']['application_path']}/#{node['twoscoops']['application_name']}"
   repository node['twoscoops']['application_repository']
   revision node['twoscoops']['application_revision']
   deploy_key github_keys['private_key']

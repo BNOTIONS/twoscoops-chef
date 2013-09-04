@@ -27,7 +27,7 @@ supervisor_service "uwsgi" do
   user "www-data"
   command "/usr/local/bin/uwsgi --uwsgi-socket :8080 --wsgi-file #{node['twoscoops']['project_name']}/wsgi.py --touch-reload=/tmp/uwsgi_restart.txt"
   autostart true
-  directory "#{node['twoscoops']['application_deploy_path']}/#{node['twoscoops']['application_name']}/current/#{node['twoscoops']['project_name']}"
+  directory "#{node['twoscoops']['application_path']}/#{node['twoscoops']['application_name']}/current/#{node['twoscoops']['project_name']}"
   stdout_logfile "/var/log/uwsgi.log"
   stderr_logfile "/var/log/uwsgi_error.log"
   environment "SECRET_KEY" => node['twoscoops']['secret_key'],

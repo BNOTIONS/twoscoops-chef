@@ -11,6 +11,14 @@ include_recipe "rabbitmq"
 
 user "celery"
 
+directory "/var/run/celery" do
+  owner "celery"
+end
+
+directory "/var/lib/celery" do
+  owner "celery"
+end
+
 supervisor_service "celeryd" do
   command "python manage.py celeryd --loglevel=INFO"
   user "celery"
@@ -36,7 +44,7 @@ directory "/var/lib/celery" do
 end
 
 supervisor_service "celery-beat" do
-  command "python manage.py celery beat --pidfile=/var/run/celery-beat.pid --schedule=/var/lib/celery/celerybeat-schedule --loglevel=INFO"
+  command "python manage.py celery beat --pidfile=/var/run/celery/celery-beat.pid --schedule=/var/lib/celery/celerybeat-schedule --loglevel=INFO"
   user "celery"
   autostart true
   directory "/vagrant/#{node['twoscoops']['project_name']}"

@@ -1,12 +1,13 @@
 #
 # Cookbook Name:: twoscoops
-# Recipe:: development
+# Recipe:: local
 #
 # Copyright 2013, YOUR_COMPANY_NAME
 #
 # All rights reserved - Do Not Redistribute
 #
 
+include_recipe "twoscoops::base"
 include_recipe "twoscoops::database"
 
 directory "/vagrant/logs" do

@@ -11,6 +11,7 @@ include_recipe "rabbitmq"
 
 supervisor_service "celeryd" do
   command "python manage.py celeryd --loglevel=INFO"
+  user "nobody"
   autostart true
   directory "/vagrant/#{node['twoscoops']['project_name']}"
   stdout_logfile "/vagrant/logs/celeryd.log"
@@ -20,6 +21,7 @@ end
 
 supervisor_service "celeryd" do
   command "python manage.py celery worker --loglevel=INFO"
+  user "nobody"
   autostart true
   directory "/vagrant/#{node['twoscoops']['project_name']}"
   stdout_logfile "/vagrant/logs/celery_worker.log"
@@ -27,8 +29,11 @@ supervisor_service "celeryd" do
   action :enable
 end
 
+directory "/var/lib/celery"
+
 supervisor_service "celery-beat" do
   command "python manage.py celery beat --schedule=/var/lib/celery/celerybeat-schedule --loglevel=INFO"
+  user "nobody"
   autostart true
   directory "/vagrant/#{node['twoscoops']['project_name']}"
   stdout_logfile "/vagrant/logs/celery_beat.log"

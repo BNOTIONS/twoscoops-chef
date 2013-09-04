@@ -7,6 +7,8 @@
 # All rights reserved - Do Not Redistribute
 #
 
+include_recipe "rabbitmq"
+
 supervisor_service "celeryd" do
   command "python manage.py celeryd --loglevel=INFO"
   autostart true

@@ -10,6 +10,7 @@
 secret = Chef::EncryptedDataBagItem.load_secret("/tmp/encrypted_data_bag_secret")
 github_keys = Chef::EncryptedDataBagItem.load("github-deploy", node['twoscoops']['application_name'], secret)
 
+include_recipe "twoscoops::base"
 include_recipe "twoscoops::database"
 include_recipe "twoscoops::webserver"
 

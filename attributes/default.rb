@@ -4,7 +4,7 @@ default["twoscoops"]["project_name"] = nil
 default["twoscoops"]["application_name"] = nil
 default["twoscoops"]["application_revision"] = nil
 
-default["twoscoops"]["application_deploy_path"] = "/srv/www"
+default["twoscoops"]["application_path"] = "/vagrant"
 default["twoscoops"]["application_environment"] = "local"
 
 default["twoscoops"]["database"]["engine"] = "django.db.backends.postgresql_psycopg2"

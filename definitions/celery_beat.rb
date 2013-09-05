@@ -4,7 +4,7 @@ define :celery_beat, :enable => true, :virtualenv => false, :startsecs => 10, :d
   case params[:enable]
   when true
     include_recipe 'python'
-    include_recipe 'supervisord'
+    include_recipe 'supervisor'
 
     celery_command = String.new
 
@@ -53,13 +53,14 @@ define :celery_beat, :enable => true, :virtualenv => false, :startsecs => 10, :d
 
     Chef::Log.debug("celery_beat: generated celery_command as: " + celery_command.inspect)
 
-    python_pip 'celery' do
-      version node[:celery][:version] unless node[:celery][:version].nil?
-      virtualenv params[:virtualenv] if params[:virtualenv]
-      action :install
-    end
+    # let project requirements define celery install
+    #python_pip 'celery' do
+    #  version node[:celery][:version] unless node[:celery][:version].nil?
+    #  virtualenv params[:virtualenv] if params[:virtualenv]
+    #  action :install
+    #end
 
-    supervisord_program "celerybeat-#{params[:name]}" do
+    supervisor_service "celerybeat-#{params[:name]}" do
       command celery_command
       directory params[:directory]
       autostart true
@@ -71,7 +72,7 @@ define :celery_beat, :enable => true, :virtualenv => false, :startsecs => 10, :d
       stopwaitsecs params[:stopwaitsecs]
       numprocs 1
       priority 999
-      action :supervise
+      action :start
     end
 
     # supervisord should automatically start the service, but we want a service 

@@ -4,7 +4,7 @@ define :celery_worker, :enable => true, :virtualenv => false, :startsecs => 10, 
   case params[:enable]
   when true
     include_recipe 'python'
-    include_recipe 'supervisord'
+    include_recipe 'supervisor'
 
     celery_command = String.new
 
@@ -53,7 +53,7 @@ define :celery_worker, :enable => true, :virtualenv => false, :startsecs => 10, 
 
     Chef::Log.debug("celery_worker: generated celery_command as: " + celery_command.inspect)
 
-    supervisord_program "celeryd-#{params[:name]}" do
+    supervisor_service "celeryd-#{params[:name]}" do
       command celery_command
       directory params[:directory]
       autostart true
@@ -64,7 +64,7 @@ define :celery_worker, :enable => true, :virtualenv => false, :startsecs => 10, 
       startsecs params[:startsecs]
       stopwaitsecs params[:stopwaitsecs]
       priority 998
-      action :supervise
+      action :start
     end
 
     # supervisord should automatically start the service, but we want a service

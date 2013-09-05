@@ -80,7 +80,7 @@ celery_worker_options = {
 celery_worker "#{node['twoscoops']['project_name']}" do
   user "celery"
   django "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
-  logfile "#{node['twoscoops']['application_path']}/logs/celery-worker-#{params[:name]}"
+  logfile "#{node['twoscoops']['application_path']}/logs/celery-worker.log"
   options celery_worker_options
 end
 
@@ -91,6 +91,7 @@ celery_beat_options = {
 celery_beat "#{node['twoscoops']['project_name']}" do
   user "celery"
   django "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
+  logfile "#{node['twoscoops']['application_path']}/logs/celery-beat.log"
   options celery_beat_options
 end
 

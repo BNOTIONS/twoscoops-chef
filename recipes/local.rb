@@ -10,9 +10,9 @@
 include_recipe "twoscoops::base"
 include_recipe "twoscoops::database"
 include_recipe "rabbitmq"
-include_recpie "celery"
-include_recpie "supervisor"
-include_recpie "supervisord"
+include_recipe "celery"
+include_recipe "supervisor"
+include_recipe "supervisord"
 
 #user "celery"
 

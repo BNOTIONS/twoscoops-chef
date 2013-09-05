@@ -8,7 +8,7 @@ server {
   client_max_body_size 32M;
 
   location /static/ {
-    alias <%= node[:twoscoops][:application_deploy_path] %>/<%= node[:twoscoops][:application_name] %>/current/<%= node[:twoscoops][:project_name] %>/assets/;
+    alias <%= node[:twoscoops][:application_path] %>/<%= node[:twoscoops][:application_name] %>/current/<%= node[:twoscoops][:project_name] %>/assets/;
   }
 
   location / {

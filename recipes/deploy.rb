@@ -8,7 +8,7 @@
 #
 
 secret = Chef::EncryptedDataBagItem.load_secret("/tmp/encrypted_data_bag_secret")
-github_keys = Chef::EncryptedDataBagItem.load("github-deploy", node['twoscoops']['application_name'], secret)
+github_keys = Chef::EncryptedDataBagItem.load("github-deploy-keys", node['twoscoops']['application_name'], secret)
 
 include_recipe "twoscoops::base"
 include_recipe "twoscoops::database"
@@ -116,8 +116,8 @@ application node['twoscoops']['application_name'] do
         ./manage.py collectstatic --noinput
       EOF
     end
-
-    include_recipe "twoscoops::celery"
   end
 end
+
+include_recipe "twoscoops::celery"
 

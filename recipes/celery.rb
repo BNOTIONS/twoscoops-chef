@@ -1,3 +1,6 @@
+include_recipe "rabbitmq"
+include_recipe "supervisor"
+
 user "celery"
 
 directory "/var/run/celery" do

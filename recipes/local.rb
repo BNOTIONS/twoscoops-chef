@@ -9,7 +9,6 @@
 
 include_recipe "twoscoops::base"
 include_recipe "twoscoops::database"
-include_recipe "rabbitmq"
 include_recipe "supervisor"
 
 directory "#{node['twoscoops']['application_path']}/logs" do

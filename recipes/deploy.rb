@@ -116,6 +116,8 @@ application node['twoscoops']['application_name'] do
         ./manage.py collectstatic --noinput
       EOF
     end
+
+    include_recipe "twoscoops::celery"
   end
 end
 

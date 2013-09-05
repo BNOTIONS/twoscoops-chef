@@ -78,7 +78,7 @@ celery_worker_options = {
   "queues" => "celery",
   "loglevel" => "INFO"
 }.each do |k,v|
-  celery_worker_command = celery_worker_command + "--#{k}=#{v}"
+  celery_worker_command = celery_worker_command + "--#{k}=#{v} "
 end
 
 supervisor_service "celery-worker" do
@@ -98,7 +98,7 @@ celery_beat_options = {
   "schedule" => "/var/lib/celery/celerybeat-schedule",
   "loglevel" => "INFO"
 }.each do |k,v|
-  celery_beat_command = celery_beat_command + "--#{k}=#{v}"
+  celery_beat_command = celery_beat_command + "--#{k}=#{v} "
 end
 
 supervisor_service "celery-beat" do

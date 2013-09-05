@@ -10,19 +10,7 @@
 include_recipe "twoscoops::base"
 include_recipe "twoscoops::database"
 include_recipe "rabbitmq"
-include_recipe "celery"
 include_recipe "supervisor"
-include_recipe "supervisord"
-
-#user "celery"
-
-#directory "/var/run/celery" do
-#  owner "celery"
-#end
-
-#directory "/var/lib/celery" do
-#  owner "celery"
-#end
 
 directory "#{node['twoscoops']['application_path']}/logs" do
   action :create
@@ -73,58 +61,53 @@ supervisor_service "#{node['twoscoops']['project_name']}" do
   action :enable
 end
 
+user "celery"
+
+directory "/var/run/celery" do
+  owner "celery"
+end
+
+directory "/var/lib/celery" do
+  owner "celery"
+end
+
+celery_worker_command = "python manage.py celery worker"
 celery_worker_options = {
   "broker" => "amqp://guest:guest@localhost/",
   "concurrency" => 2,
-  "queues" => "celery"
-}
-
-celery_worker "#{node['twoscoops']['project_name']}" do
-  user "celery"
-  django "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
-  logfile "#{node['twoscoops']['application_path']}/logs/celery-worker.log"
-  options celery_worker_options
+  "queues" => "celery",
+  "loglevel" => "INFO"
+}.each do |k,v|
+  celery_worker_command = celery_worker_command + "--#{k}=#{v}"
 end
 
+supervisor_service "celery-worker" do
+  command celery_worker_command
+  user "celery"
+  autostart true
+  directory "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
+  stdout_logfile "#{node['twoscoops']['application_path']}/logs/celery_worker.log"
+  stderr_logfile "#{node['twoscoops']['application_path']}/logs/celery_worker.log"
+  action :enable
+end
+
+celery_beat_command = "python manage.py celery beat"
 celery_beat_options = {
-  "broker" => "amqp://guest:guest@localhost/"
-}
-
-celery_beat "#{node['twoscoops']['project_name']}" do
-  user "celery"
-  django "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
-  logfile "#{node['twoscoops']['application_path']}/logs/celery-beat.log"
-  options celery_beat_options
+  "broker" => "amqp://guest:guest@localhost/",
+  "pidfile" => "/var/run/celery/celery-beat.pid",
+  "schedule" => "/var/lib/celery/celerybeat-schedule",
+  "loglevel" => "INFO"
+}.each do |k,v|
+  celery_beat_command = celery_beat_command + "--#{k}=#{v}"
 end
 
-
-#supervisor_service "celeryd" do
-#  command "python manage.py celeryd --loglevel=INFO"
-#  user "celery"
-#  autostart true
-#  directory "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
-#  stdout_logfile "#{node['twoscoops']['application_path']}/logs/celeryd.log"
-#  stderr_logfile "#{node['twoscoops']['application_path']}/logs/celeryd_error.log"
-#  action :enable
-#end
-
-#supervisor_service "celery-worker" do
-#  command "python manage.py celery worker --loglevel=INFO"
-#  user "celery"
-#  autostart true
-#  directory "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
-#  stdout_logfile "#{node['twoscoops']['application_path']}/logs/celery_worker.log"
-#  stderr_logfile "#{node['twoscoops']['application_path']}/logs/celery_worker_error.log"
-#  action :enable
-#end
-
-#supervisor_service "celery-beat" do
-#  command "python manage.py celery beat --pidfile=/var/run/celery/celery-beat.pid --schedule=/var/lib/celery/celerybeat-schedule --loglevel=INFO"
-#  user "celery"
-#  autostart true
-#  directory "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
-#  stdout_logfile "#{node['twoscoops']['application_path']}/logs/celery_beat.log"
-#  stderr_logfile "#{node['twoscoops']['application_path']}/logs/celery_beat_error.log"
-#  action :enable
-#end
+supervisor_service "celery-beat" do
+  command celery_beat_command
+  user "celery"
+  autostart true
+  directory "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
+  stdout_logfile "#{node['twoscoops']['application_path']}/logs/celery_beat.log"
+  stderr_logfile "#{node['twoscoops']['application_path']}/logs/celery_beat.log"
+  action :enable
+end
 

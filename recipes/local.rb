@@ -71,21 +71,27 @@ supervisor_service "#{node['twoscoops']['project_name']}" do
   action :enable
 end
 
+celery_worker_options = {
+  "broker" => "amqp://guest:guest@localhost/",
+  "concurrency" => 2,
+   "queues" => "celery"
+}
+
 celery_worker "#{node['twoscoops']['project_name']}" do
   user "celery"
   django "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
   logfile "#{node['twoscoops']['application_path']}/logs/celery-worker-#{params[:name]}"
-  options {
-    "broker" => "amqp://guest:guest@localhost/", 
-    "concurrency" => 2,
-    "queues" => "celery"
-  }
+  options celery_worker_options
 end
 
+celery_beat_options = {
+  "broker" => "amqp://guest:guest@localhost/"
+}
+
 celery_beat "#{node['twoscoops']['project_name']}" do
+  user "celery"
   django "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
-  virtualenv virtualenv_path
-  options { "broker" => "amqp://guest:guest@localhost/" }
+  options celery_beat_options
 end
 
 

@@ -12,15 +12,15 @@ include_recipe "twoscoops::database"
 include_recipe "rabbitmq"
 include_recipe "supervisor"
 
-user "celery"
+#user "celery"
 
-directory "/var/run/celery" do
-  owner "celery"
-end
+#directory "/var/run/celery" do
+#  owner "celery"
+#end
 
-directory "/var/lib/celery" do
-  owner "celery"
-end
+#directory "/var/lib/celery" do
+#  owner "celery"
+#end
 
 directory "#{node['twoscoops']['application_path']}/logs" do
   action :create
@@ -62,7 +62,7 @@ execute "django-migrate" do
   command "python manage.py migrate"
 end
 
-supervisor_service "django" do
+supervisor_service "#{node['twoscoops']['project_name']}" do
   command "python manage.py runserver 0.0.0.0:8080"
   autostart true
   directory "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
@@ -71,33 +71,51 @@ supervisor_service "django" do
   action :enable
 end
 
-supervisor_service "celeryd" do
-  command "python manage.py celeryd --loglevel=INFO"
+celery_worker "#{node['twoscoops']['project_name']}" do
   user "celery"
-  autostart true
-  directory "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
-  stdout_logfile "#{node['twoscoops']['application_path']}/logs/celeryd.log"
-  stderr_logfile "#{node['twoscoops']['application_path']}/logs/celeryd_error.log"
-  action :enable
+  django "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
+  logfile "#{node['twoscoops']['application_path']}/logs/celery-worker-#{params[:name]}"
+  options {
+    "broker" => "amqp://guest:guest@localhost/", 
+    "concurrency" => 2,
+    "queues" => "celery"
+  }
 end
 
-supervisor_service "celery-worker" do
-  command "python manage.py celery worker --loglevel=INFO"
-  user "celery"
-  autostart true
-  directory "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
-  stdout_logfile "#{node['twoscoops']['application_path']}/logs/celery_worker.log"
-  stderr_logfile "#{node['twoscoops']['application_path']}/logs/celery_worker_error.log"
-  action :enable
+celery_beat "#{node['twoscoops']['project_name']}" do
+  django "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
+  virtualenv virtualenv_path
+  options { "broker" => "amqp://guest:guest@localhost/" }
 end
 
-supervisor_service "celery-beat" do
-  command "python manage.py celery beat --pidfile=/var/run/celery/celery-beat.pid --schedule=/var/lib/celery/celerybeat-schedule --loglevel=INFO"
-  user "celery"
-  autostart true
-  directory "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
-  stdout_logfile "#{node['twoscoops']['application_path']}/logs/celery_beat.log"
-  stderr_logfile "#{node['twoscoops']['application_path']}/logs/celery_beat_error.log"
-  action :enable
-end
+
+#supervisor_service "celeryd" do
+#  command "python manage.py celeryd --loglevel=INFO"
+#  user "celery"
+#  autostart true
+#  directory "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
+#  stdout_logfile "#{node['twoscoops']['application_path']}/logs/celeryd.log"
+#  stderr_logfile "#{node['twoscoops']['application_path']}/logs/celeryd_error.log"
+#  action :enable
+#end
+
+#supervisor_service "celery-worker" do
+#  command "python manage.py celery worker --loglevel=INFO"
+#  user "celery"
+#  autostart true
+#  directory "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
+#  stdout_logfile "#{node['twoscoops']['application_path']}/logs/celery_worker.log"
+#  stderr_logfile "#{node['twoscoops']['application_path']}/logs/celery_worker_error.log"
+#  action :enable
+#end
+
+#supervisor_service "celery-beat" do
+#  command "python manage.py celery beat --pidfile=/var/run/celery/celery-beat.pid --schedule=/var/lib/celery/celerybeat-schedule --loglevel=INFO"
+#  user "celery"
+#  autostart true
+#  directory "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
+#  stdout_logfile "#{node['twoscoops']['application_path']}/logs/celery_beat.log"
+#  stderr_logfile "#{node['twoscoops']['application_path']}/logs/celery_beat_error.log"
+#  action :enable
+#end
 

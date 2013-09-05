@@ -10,7 +10,9 @@
 include_recipe "twoscoops::base"
 include_recipe "twoscoops::database"
 include_recipe "rabbitmq"
-include_recipe "supervisor"
+include_recpie "celery"
+include_recpie "supervisor"
+include_recpie "supervisord"
 
 #user "celery"
 
@@ -74,7 +76,7 @@ end
 celery_worker_options = {
   "broker" => "amqp://guest:guest@localhost/",
   "concurrency" => 2,
-   "queues" => "celery"
+  "queues" => "celery"
 }
 
 celery_worker "#{node['twoscoops']['project_name']}" do

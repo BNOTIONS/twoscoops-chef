@@ -71,7 +71,7 @@ directory "/var/lib/celery" do
   owner "celery"
 end
 
-celery_worker_command = "python manage.py celery worker"
+celery_worker_command = "python manage.py celery worker "
 celery_worker_options = {
   "broker" => "amqp://guest:guest@localhost/",
   "concurrency" => 2,
@@ -91,7 +91,7 @@ supervisor_service "celery-worker" do
   action :enable
 end
 
-celery_beat_command = "python manage.py celery beat"
+celery_beat_command = "python manage.py celery beat "
 celery_beat_options = {
   "broker" => "amqp://guest:guest@localhost/",
   "pidfile" => "/var/run/celery/celery-beat.pid",

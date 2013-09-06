@@ -7,8 +7,10 @@
 # All rights reserved - Do Not Redistribute
 #
 
-secret = Chef::EncryptedDataBagItem.load_secret("/tmp/encrypted_data_bag_secret")
-github_keys = Chef::EncryptedDataBagItem.load("github-deploy-keys", node['twoscoops']['application_name'], secret)
+#secret = Chef::EncryptedDataBagItem.load_secret("/tmp/encrypted_data_bag_secret")
+#github_keys = Chef::EncryptedDataBagItem.load("github-deploy-keys", node['twoscoops']['application_name'], secret)
+
+github_keys = data_bag_item('github-deploy-keys', node['twoscoops']['application_name'])
 
 include_recipe "twoscoops::base"
 include_recipe "twoscoops::database"
@@ -120,4 +122,3 @@ application node['twoscoops']['application_name'] do
 end
 
 include_recipe "twoscoops::celery"
-

@@ -35,6 +35,7 @@ application node['twoscoops']['application_name'] do
   migration_command "echo 'migrate!'"
   symlink_before_migrate ({
     "settings/celery_settings.py" => "#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/celery_settings.py",
+    "settings/raven_settings.py" => "#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/raven_settings.py",
     "settings/database.py" => "#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/database.py",
     "app_environment.sh" => "#{node['twoscoops']['project_name']}/app_environment.sh" 
   })
@@ -45,6 +46,11 @@ application node['twoscoops']['application_name'] do
 
     template "#{shared_path}/settings/celery_settings.py" do
       source "celery.py.erb"
+      mode 00644
+    end
+
+    template "#{shared_path}/settings/raven_settings.py" do
+      source "raven.py.erb"
       mode 00644
     end
 

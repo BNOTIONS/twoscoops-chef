@@ -29,9 +29,11 @@ directory "#{node['twoscoops']['application_path']}/logs/celery" do
   recursive true
 end
 
-template "#{celery_path}/#{node['twoscoops']['project_name']}/settings/celery.py" do
-  source "celery.py.erb"
-  mode 00644
+if node['twoscoops']['application_revision'] == nil
+  template "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/celery.py" do
+    source "celery.py.erb"
+    mode 00644
+  end
 end
 
 celeryd_command = "celeryd --app=#{node['twoscoops']['project_name']} "

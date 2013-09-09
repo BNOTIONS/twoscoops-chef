@@ -2,7 +2,7 @@
 # Cookbook Name:: twoscoops
 # Recipe:: deploy
 #
-# Copyright 2013, YOUR_COMPANY_NAME
+# Copyright 2013, BNOTIONS
 #
 # All rights reserved - Do Not Redistribute
 #

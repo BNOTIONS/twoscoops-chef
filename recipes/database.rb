@@ -16,6 +16,11 @@ if node['twoscoops']['database']['engine'] == 'django.db.backends.postgresql_psy
     :password => node['postgresql']['password']['postgres']
   }
 
+  template "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/database.py" do
+    source "database.py.erb"
+    mode 00644
+  end
+
   postgresql_database node['twoscoops']['application_name'] do
     connection database_connection_info
     provider Chef::Provider::Database::Postgresql

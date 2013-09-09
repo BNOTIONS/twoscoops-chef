@@ -16,5 +16,8 @@ default["twoscoops"]["database"]["port"] = ""
 default["twoscoops"]["superuser"]["username"] = "vagrant"
 default["twoscoops"]["superuser"]["password_hash"] = "pbkdf2_sha256$10000$NoIByEhX0v78$UgkCwmSHBNYiFPD0zCkZ9x+S7z5tlRysHv/L68OJdxc="
 
-default["twoscoops"]["celery"]["broker"] = "amqp://guest:guest@localhost/"
+default["twoscoops"]["celery"]["celery_result_backend"] = "amqp"
+default["twoscoops"]["celery"]["broker_url"] = "amqp://guest:guest@localhost:5672/"
+default["twoscoops"]["celery"]["queues"] = "celery"
 default["twoscoops"]["celery"]["concurrency"] = 2
+default["twoscoops"]["celery"]["loglevel"] = "INFO"

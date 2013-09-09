@@ -30,7 +30,7 @@ directory "#{node['twoscoops']['application_path']}/logs/celery" do
 end
 
 if node['twoscoops']['application_revision'] == nil
-  template "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/celery.py" do
+  template "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/celery_settings.py" do
     source "celery.py.erb"
     mode 00644
   end

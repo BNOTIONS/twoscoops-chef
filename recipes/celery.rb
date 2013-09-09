@@ -29,6 +29,11 @@ directory "#{node['twoscoops']['application_path']}/logs/celery" do
   recursive true
 end
 
+template "#{celery_path}/#{node['twoscoops']['project_name']}/settings/celery.py" do
+  source "celery.py.erb"
+  mode 00644
+end
+
 celeryd_command = "celeryd --app=#{node['twoscoops']['project_name']} "
 celeryd_options = {
   "broker" => node["twoscoops"]["celery"]["broker_url"],

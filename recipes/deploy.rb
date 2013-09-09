@@ -34,12 +34,18 @@ application node['twoscoops']['application_name'] do
   migrate true
   migration_command "echo 'migrate!'"
   symlink_before_migrate ({
+    "settings/celery.py" => "#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/celery.py",
     "settings/database.py" => "#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/database.py",
     "app_environment.sh" => "#{node['twoscoops']['project_name']}/app_environment.sh" 
   })
   before_migrate do
     directory "#{shared_path}/settings" do
       recursive true
+    end
+
+    template "#{shared_path}/settings/celery.py" do
+      source "celery.py.erb"
+      mode 00644
     end
 
     template "#{shared_path}/settings/database.py" do

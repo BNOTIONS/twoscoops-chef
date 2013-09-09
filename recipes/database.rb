@@ -7,12 +7,6 @@
 # All rights reserved - Do Not Redistribute
 #
 
-if node['twoscoops']['application_revision'] == nil
-  settings_path = "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings"
-else
-  settings_path = "#{node['twoscoops']['application_path']}/#{node['twoscoops']['application_name']}/current/#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings"
-end
-
 if node['twoscoops']['database']['engine'] == 'django.db.backends.postgresql_psycopg2'
   include_recipe "database::postgresql"
 
@@ -22,9 +16,11 @@ if node['twoscoops']['database']['engine'] == 'django.db.backends.postgresql_psy
     :password => node['postgresql']['password']['postgres']
   }
 
-  template "#{settings_path}/database.py" do
-    source "database.py.erb"
-    mode 00644
+  if node['twoscoops']['application_revision'] == nil
+    template "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/database.py" do
+      source "database.py.erb"
+      mode 00644
+    end
   end
 
   postgresql_database node['twoscoops']['application_name'] do

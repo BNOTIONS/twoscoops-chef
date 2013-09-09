@@ -16,11 +16,6 @@ directory "#{node['twoscoops']['application_path']}/logs" do
   mode 00755
 end
 
-template "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/database.py" do
-  source "database.py.erb"
-  mode 00644
-end
-
 execute "pip-install-requirements" do
   cwd "#{node['twoscoops']['application_path']}"
   command "pip install -r requirements/local.txt"

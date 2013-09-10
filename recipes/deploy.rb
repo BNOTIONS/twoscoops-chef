@@ -12,6 +12,7 @@
 
 github_keys = data_bag_item('github-deploy-keys', node['twoscoops']['application_name'])
 
+include_recipe "memcached"
 include_recipe "twoscoops::base"
 include_recipe "twoscoops::database"
 include_recipe "twoscoops::webserver"
@@ -34,6 +35,7 @@ application node['twoscoops']['application_name'] do
   migrate true
   migration_command "echo 'migrate!'"
   symlink_before_migrate ({
+    "settings/cache_settings.py" => "#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/cache_settings.py",
     "settings/celery_settings.py" => "#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/celery_settings.py",
     "settings/raven_settings.py" => "#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/raven_settings.py",
     "settings/database.py" => "#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/database.py",
@@ -42,6 +44,11 @@ application node['twoscoops']['application_name'] do
   before_migrate do
     directory "#{shared_path}/settings" do
       recursive true
+    end
+
+    template "#{shared_path}/settings/cache_settings.py" do
+      source "cache.py.erb"
+      mode 00644
     end
 
     template "#{shared_path}/settings/celery_settings.py" do
@@ -84,18 +91,18 @@ application node['twoscoops']['application_name'] do
       EOF
     end
 
-    bash "django-createcachetable" do
-      cwd "#{shared_path}/../current/#{node['twoscoops']['project_name']}"
-      code <<-EOF
-        source app_environment.sh
-        ./manage.py createcachetable application_cache
-      EOF
-      only_if do
-        con = PGconn.connect("host=localhost user=postgres password=#{node['postgresql']['password']['postgres']} dbname=#{node['twoscoops']['application_name']}")
-        res = con.exec("SELECT count(*) FROM information_schema.tables WHERE table_name = 'application_cache'")
-        res.entries[0]['count'] == 0
-      end
-    end
+#    bash "django-createcachetable" do
+#      cwd "#{shared_path}/../current/#{node['twoscoops']['project_name']}"
+#      code <<-EOF
+#        source app_environment.sh
+#        ./manage.py createcachetable application_cache
+#      EOF
+#      only_if do
+#        con = PGconn.connect("host=localhost user=postgres password=#{node['postgresql']['password']['postgres']} dbname=#{node['twoscoops']['application_name']}")
+#        res = con.exec("SELECT count(*) FROM information_schema.tables WHERE table_name = 'application_cache'")
+#        res.entries[0]['count'] == 0
+#      end
+#    end
 
     directory "/tmp/twoscoops/fixtures" do
       recursive true

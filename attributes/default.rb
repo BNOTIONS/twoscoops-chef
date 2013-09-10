@@ -24,5 +24,6 @@ default["twoscoops"]["celery"]["broker_url"] = "amqp://guest:guest@localhost:567
 default["twoscoops"]["celery"]["concurrency"] = 2
 default["twoscoops"]["celery"]["loglevel"] = "INFO"
 default["twoscoops"]["celery"]["queues"] = nil
+default["twoscoops"]["celery"]["beat"]["schedule_filename"] = nil
 
 default["twoscoops"]["raven"]["dsn"] = nil

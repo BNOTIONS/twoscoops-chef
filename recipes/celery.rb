@@ -38,15 +38,15 @@ if node['twoscoops']['application_revision'] == nil
   end
 end
 
-celeryd_command = "celeryd --app=#{node['twoscoops']['project_name']} "
-celeryd_options = {
-  "broker" => node["twoscoops"]["celery"]["broker_url"],
-  "concurrency" => node["twoscoops"]["celery"]["concurrency"],
-  "queues" => node["twoscoops"]["celery"]["queues"],
-  "loglevel" => node["twoscoops"]["celery"]["loglevel"]
-}.each do |k,v|
-  celeryd_command = celeryd_command + "--#{k}=#{v} "
-end
+#celeryd_command = "celeryd --app=#{node['twoscoops']['project_name']} "
+#celeryd_options = {
+#  "broker" => node["twoscoops"]["celery"]["broker_url"],
+#  "concurrency" => node["twoscoops"]["celery"]["concurrency"],
+#  "queues" => node["twoscoops"]["celery"]["queues"],
+#  "loglevel" => node["twoscoops"]["celery"]["loglevel"]
+#}.each do |k,v|
+#  celeryd_command = celeryd_command + "--#{k}=#{v} "
+#end
 
 supervisor_service "celeryd" do
   command "python manage.py celery worker"
@@ -59,15 +59,15 @@ supervisor_service "celeryd" do
   action :enable
 end
 
-celery_beat_command = "celerybeat "
-celery_beat_options = {
-  "broker" => node["twoscoops"]["celery"]["broker_url"],
-  "pidfile" => "/var/run/celery/celery-beat.pid",
-  "schedule" => "/var/lib/celery/celerybeat-schedule",
-  "loglevel" => node["twoscoops"]["celery"]["loglevel"]
-}.each do |k,v|
-  celery_beat_command = celery_beat_command + "--#{k}=#{v} "
-end
+#celery_beat_command = "celerybeat "
+#celery_beat_options = {
+#  "broker" => node["twoscoops"]["celery"]["broker_url"],
+#  "pidfile" => "/var/run/celery/celery-beat.pid",
+#  "schedule" => "/var/lib/celery/celerybeat-schedule",
+#  "loglevel" => node["twoscoops"]["celery"]["loglevel"]
+#}.each do |k,v|
+#  celery_beat_command = celery_beat_command + "--#{k}=#{v} "
+#end
 
 supervisor_service "celery-beat" do
   command "python manage.py celery beat"

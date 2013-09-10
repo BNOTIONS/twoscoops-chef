@@ -10,4 +10,3 @@ CELERY_DEFAULT_QUEUE = 'default'
 <% else %>
 CELERY_QUEUES = <%= node[:twoscoops][:celery][:queues] %>
 <% end %>
-CELERYBEAT_SCHEDULE_FILENAME = '<%= node[:twoscoops][:celerybeat][:schedule_filename] %>'

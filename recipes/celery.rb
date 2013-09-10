@@ -11,7 +11,9 @@ else
 end
 
 celery_env = {
-  "PYTHON_PATH" => "#{celery_path}" 
+  "PYTHON_PATH" => "#{celery_path}",
+  "SECRET_KEY" => "#{node['twoscoops']['secret_key']}",
+  "DJANGO_SETTINGS_MODULE" => "#{node['twoscoops']['project_name']}.settings.#{node['twoscoops']['application_environment']}"
 }
 
 user "celery"
@@ -47,7 +49,7 @@ celeryd_options = {
 end
 
 supervisor_service "celeryd" do
-  command celeryd_command
+  command "python manage.py celery worker"
   user "celery"
   autostart true
   directory celery_path
@@ -68,7 +70,7 @@ celery_beat_options = {
 end
 
 supervisor_service "celery-beat" do
-  command celery_beat_command
+  command "python manage celery beat"
   user "celery"
   autostart true
   directory celery_path

@@ -21,8 +21,8 @@ default["twoscoops"]["cache"]["location"] = "127.0.0.1:11211"
 
 default["twoscoops"]["celery"]["celery_result_backend"] = "amqp"
 default["twoscoops"]["celery"]["broker_url"] = "amqp://guest:guest@localhost:5672/"
-default["twoscoops"]["celery"]["queues"] = "celery"
 default["twoscoops"]["celery"]["concurrency"] = 2
 default["twoscoops"]["celery"]["loglevel"] = "INFO"
+default["twoscoops"]["celery"]["queues"] = nil
 
 default["twoscoops"]["raven"]["dsn"] = nil

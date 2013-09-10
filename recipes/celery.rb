@@ -70,7 +70,7 @@ end
 #end
 
 supervisor_service "celery-beat" do
-  command "python manage.py celery beat --pidfile=/var/run/celery/celerybeat.pid"
+  command "python manage.py celery beat --pidfile=/var/run/celery/celerybeat.pid --schedule=#{node['twoscoops']['celerybeat']['schedule_filename']}"
   user "celery"
   autostart true
   directory celery_path

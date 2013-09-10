@@ -6,10 +6,8 @@ include_recipe "supervisor"
 
 if node['twoscoops']['application_revision'] == nil
   celery_path = "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
-  node['twoscoops']['celery']['beat']['schedule_filename'] = "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}/celery_schedule"
 else
   celery_path = "#{node['twoscoops']['application_path']}/#{node['twoscoops']['application_name']}/current/#{node['twoscoops']['project_name']}"
-  node['twoscoops']['celery']['beat']['schedule_filename'] = "#{node['twoscoops']['application_path']}/#{node['twoscoops']['application_name']}/shared/celery_schedule"
 end
 
 celery_env = {

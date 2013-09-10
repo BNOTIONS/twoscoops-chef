@@ -70,7 +70,7 @@ end
 #end
 
 supervisor_service "celery-beat" do
-  command "python manage.py celery beat"
+  command "python manage.py celery beat --pidfile=/var/run/celery/celerybeat.pid"
   user "celery"
   autostart true
   directory celery_path

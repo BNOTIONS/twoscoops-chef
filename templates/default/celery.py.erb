@@ -6,3 +6,8 @@ djcelery.setup_loader()
 CELERY_RESULT_BACKEND = '<%= node[:twoscoops][:celery][:celery_result_backend] %>'
 
 BROKER_URL = '<%= node[:twoscoops][:celery][:broker_url] %>'
+
+CELERYD_CONCURRENCY = '<%= node[:twoscoops][:celery][:concurrency] %>'
+CELERY_REDIRECT_STDOUTS_LEVEL = '<%= node[:twoscoops][:celery][:loglevel] %>'
+CELERY_QUEUES = '<%= node[:twoscoops][:celery][:queues] %>
+

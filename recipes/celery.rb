@@ -70,7 +70,7 @@ celery_beat_options = {
 end
 
 supervisor_service "celery-beat" do
-  command "python manage celery beat"
+  command "python manage.py celery beat"
   user "celery"
   autostart true
   directory celery_path

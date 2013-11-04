@@ -13,6 +13,7 @@ default["twoscoops"]["database"]["password"] = "vagrant"
 default["twoscoops"]["database"]["host"] = "127.0.0.1"
 default["twoscoops"]["database"]["port"] = ""
 
+default["twoscoops"]["createsuperuser"] = true
 default["twoscoops"]["superuser"]["username"] = "vagrant"
 default["twoscoops"]["superuser"]["password_hash"] = "pbkdf2_sha256$10000$NoIByEhX0v78$UgkCwmSHBNYiFPD0zCkZ9x+S7z5tlRysHv/L68OJdxc="
 

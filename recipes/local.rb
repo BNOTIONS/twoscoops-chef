@@ -32,13 +32,15 @@ directory "/tmp/twoscoops/fixtures" do
   mode 00755
 end
 
-template "/tmp/twoscoops/fixtures/createsuperuser.json" do
-  source "createsuperuser.json.erb"
-end
+if node[:twoscoops][:createsuperuser]
+  template "/tmp/twoscoops/fixtures/createsuperuser.json" do
+    source "createsuperuser.json.erb"
+  end
 
-execute "django-createsuperuser" do
-  cwd "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
-  command "python manage.py loaddata /tmp/twoscoops/fixtures/createsuperuser.json"
+  execute "django-createsuperuser" do
+    cwd "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
+    command "python manage.py loaddata /tmp/twoscoops/fixtures/createsuperuser.json"
+  end
 end
 
 execute "django-migrate" do

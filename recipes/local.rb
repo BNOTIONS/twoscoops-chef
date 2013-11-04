@@ -17,7 +17,7 @@ directory "#{node['twoscoops']['application_path']}/logs" do
 end
 
 execute "pip-install-requirements" do
-  cwd "#{node['twoscoops']['application_path']}"
+  cwd node['twoscoops']['application_path']
   command "pip install -r requirements/local.txt"
 end
 
@@ -32,7 +32,7 @@ directory "/tmp/twoscoops/fixtures" do
   mode 00755
 end
 
-if node[:twoscoops][:createsuperuser]
+if node['twoscoops']['createsuperuser']
   template "/tmp/twoscoops/fixtures/createsuperuser.json" do
     source "createsuperuser.json.erb"
   end

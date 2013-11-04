@@ -11,8 +11,8 @@ else
 end
 
 celery_env = {
-  "PYTHON_PATH" => "#{celery_path}",
-  "SECRET_KEY" => "#{node['twoscoops']['secret_key']}",
+  "PYTHON_PATH" => celery_path,
+  "SECRET_KEY" => node['twoscoops']['secret_key'],
   "DJANGO_SETTINGS_MODULE" => "#{node['twoscoops']['project_name']}.settings.#{node['twoscoops']['application_environment']}"
 }
 
@@ -31,11 +31,10 @@ directory "#{node['twoscoops']['application_path']}/logs/celery" do
   recursive true
 end
 
-if node['twoscoops']['application_revision'] == nil
-  template "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/celery_settings.py" do
-    source "celery.py.erb"
-    mode 00644
-  end
+template "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}/#{node['twoscoops']['project_name']}/settings/celery_settings.py" do
+  source "celery.py.erb"
+  mode 00644
+  only_if { node['twoscoops']['application_revision'].nil? }
 end
 
 #celeryd_command = "celeryd --app=#{node['twoscoops']['project_name']} "

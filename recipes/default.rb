@@ -7,4 +7,4 @@
 # All rights reserved - Do Not Redistribute
 #
 
-require_recipe "twoscoops::local"
+include_recipe "twoscoops::local"

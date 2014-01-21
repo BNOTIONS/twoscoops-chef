@@ -17,7 +17,7 @@ end
 
 execute "django-jenkins" do
   cwd "/vagrant/#{node['twoscoops']['project_name']}"
-  command "./manage.py jenkins --settings=#{node['twoscoops']['project_name']}.settings.test"
+  command "./manage.py jenkins --traceback"
   environment ({
     "DJANGO_SETTINGS_MODULE" => "#{node['twoscoops']['project_name']}.settings.test"
   })

@@ -32,6 +32,11 @@ directory "/tmp/twoscoops/fixtures" do
   mode 00755
 end
 
+execute "django-migrate" do
+  cwd "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
+  command "python manage.py migrate"
+end
+
 if node['twoscoops']['createsuperuser']
   template "/tmp/twoscoops/fixtures/createsuperuser.json" do
     source "createsuperuser.json.erb"
@@ -43,10 +48,6 @@ if node['twoscoops']['createsuperuser']
   end
 end
 
-execute "django-migrate" do
-  cwd "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
-  command "python manage.py migrate"
-end
 
 supervisor_service "django" do
   command "python manage.py runserver 0.0.0.0:8080"

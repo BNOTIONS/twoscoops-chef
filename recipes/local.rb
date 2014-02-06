@@ -51,7 +51,7 @@ end
 
 supervisor_service "django" do
   command "python manage.py runserver 0.0.0.0:8080"
-  autostart true
+  autostart node['twoscoops']['django']['autostart']
   directory "#{node['twoscoops']['application_path']}/#{node['twoscoops']['project_name']}"
   stdout_logfile "#{node['twoscoops']['application_path']}/logs/django.log"
   stderr_logfile "#{node['twoscoops']['application_path']}/logs/django_error.log"

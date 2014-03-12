@@ -31,3 +31,5 @@ default[:twoscoops][:celery][:queues] = nil
 default[:twoscoops][:celerybeat][:schedule_filename] = "/var/lib/celery/celerybeat_schedule"
 
 default[:twoscoops][:raven][:dsn] = nil
+
+default[:twoscoops][:test][:command] = "jenkins"

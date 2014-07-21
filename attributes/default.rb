@@ -18,6 +18,8 @@ default[:twoscoops][:superuser][:username] = "vagrant"
 default[:twoscoops][:superuser][:password_hash] = "pbkdf2_sha256$10000$NoIByEhX0v78$UgkCwmSHBNYiFPD0zCkZ9x+S7z5tlRysHv/L68OJdxc="
 
 default[:twoscoops][:django][:autostart] = true
+default[:twoscoops][:celeryd][:autostart] = true
+default[:twoscoops][:celerybeat][:autostart] = true
 
 default[:twoscoops][:cache][:backend] = "django.core.cache.backends.memcached.MemcachedCache"
 default[:twoscoops][:cache][:location] = "127.0.0.1:11211"

@@ -50,7 +50,7 @@ end
 supervisor_service "celeryd" do
   command "python manage.py celery worker"
   user "celery"
-  autostart true
+  autostart node['twoscoops']['celeryd']['autostart']
   directory celery_path
   environment celery_env
   stdout_logfile "#{node['twoscoops']['application_path']}/logs/celery/worker.log"
@@ -71,7 +71,7 @@ end
 supervisor_service "celery-beat" do
   command "python manage.py celery beat --pidfile=/var/run/celery/celerybeat.pid --schedule=#{node['twoscoops']['celerybeat']['schedule_filename']}"
   user "celery"
-  autostart true
+  autostart node['twoscoops']['celerybeat']['autostart']
   directory celery_path
   environment celery_env
   stdout_logfile "#{node['twoscoops']['application_path']}/logs/celery/beat.log"
